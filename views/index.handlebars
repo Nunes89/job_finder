@@ -21,7 +21,15 @@
       <div class="col-md-12">
         <h2 id="job-list-title" class="text-center">Veja nossas vagas em destaque</h2>
         <ul id="job-list" class="list-group">
-
+          {{#each jobs}}
+          <li class="list-group-item {{#if dataValues.new_job}}new-job{{/if}}">
+            <img src="/images/company.svg" alt="Company" />
+            <p>{{dataValues.company}}</p>
+            <h2>{{dataValues.title}}</h2>
+            <p>R$ {{dataValues.salary}}</p>
+            <span class="new-job-label">Nova</span><a href="#" class="btn btn-primary">Ver vaga</a>
+          </li>
+          {{/each}}
         </ul>
       </div>
     </div>
