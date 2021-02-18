@@ -4,7 +4,9 @@ const port = 3000;
 const path = require("path");
 const handlebars = require("express-handlebars");
 const db = require("./db/connection");
+const Job = require("./models/Job");
 const bodyParser = require("body-parser");
+const { create } = require("express-handlebars");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -22,7 +24,11 @@ db.authenticate()
     console.log("There was an error connecting to the database. ", error);
   });
 
-app.get("/", (req, res) => res.render("index"));
+app.get("/", (req, res) => {
+  Job.findAll({ order: [["createdAt", "DESC"]] }).then((jobs) => {
+    res.render("index", { jobs });
+  });
+});
 
 app.use("/jobs", require("./routes/jobs"));
 
