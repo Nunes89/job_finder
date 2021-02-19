@@ -5,8 +5,9 @@ const path = require("path");
 const handlebars = require("express-handlebars");
 const db = require("./db/connection");
 const Job = require("./models/Job");
+const sequelize = require('sequelize');
+const Op = sequelize.Op;
 const bodyParser = require("body-parser");
-const { create } = require("express-handlebars");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -25,9 +26,20 @@ db.authenticate()
   });
 
 app.get("/", (req, res) => {
-  Job.findAll({ order: [["createdAt", "DESC"]] }).then((jobs) => {
-    res.render("index", { jobs });
-  });
+  let search = req.query.job;
+  let query = '%'+search+'%';
+  
+  if (!search) { 
+    Job.findAll({ order: [["createdAt", "DESC"]] }).then((jobs) => {
+      res.render("index", { jobs });
+    }).catch(error => console.log(error));
+  } else{
+    Job.findAll({ 
+      where: {title: {[Op.like]: query}},
+      order: [["createdAt", "DESC"]] }).then((jobs) => {
+      res.render("index", { jobs, search });
+    }).catch(error => console.log(error));
+  }
 });
 
 app.use("/jobs", require("./routes/jobs"));
