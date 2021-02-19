@@ -6,7 +6,7 @@
     Somos o site com mais vagas de tecnologia no mercado, direcionadas a
     home office
   </p>
-  <form action="" id="search-form" class="form-inline col-lg-10 mx-md-auto px-lg-5">
+  <form action="/" method="GET" id="search-form" class="form-inline col-lg-10 mx-md-auto px-lg-5">
     <div class="form-group col-md-10">
       <input type="text" class="form-control" name="job" id="job" placeholder="Digite a vaga que esta buscando" />
     </div>
@@ -19,7 +19,11 @@
   <div id="jobs-container" class="container px-4 px-lg-5 col-md-10">
     <div class="row">
       <div class="col-md-12">
+        {{#if search}}
+        <h2 id="job-list-title" class="text-center">Exibindo vagas que contêm: {{search}}</h2>
+        {{else}}
         <h2 id="job-list-title" class="text-center">Veja nossas vagas em destaque</h2>
+        {{/if}}
         <ul id="job-list" class="list-group">
           {{#each jobs}}
           <li class="list-group-item {{#if dataValues.new_job}}new-job{{/if}}">
